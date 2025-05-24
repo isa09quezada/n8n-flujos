@@ -1,0 +1,89 @@
+{
+  "name": "flujo_pov_videos_gratis",
+  "nodes": [
+    {
+      "parameters": {},
+      "name": "Disparador Manual",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [200, 200]
+    },
+    {
+      "parameters": {
+        "authentication": "serviceAccount",
+        "sheetId": "1a51BQUCMXsoRog4f1wQfLmQ6L7eMriXCd1lIhrkamPI",
+        "range": "Ideas!A2:A"
+      },
+      "name": "Leer Temas desde Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [400, 200],
+      "credentials": {
+        "googleSheetsServiceAccount": "Google Sheets Bot"
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api-inference.huggingface.co/models/bigscience/bloomz-560m",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Authorization",
+              "value": "Bearer TU_TOKEN_DE_HUGGINGFACE"
+            }
+          ]
+        },
+        "jsonParameters": true,
+        "options": {},
+        "bodyParametersJson": "{\"inputs\": \"Redacta un guión viral estilo POV (en primera persona) de máximo 150 palabras sobre: {{$json[\\\"values\\\"][0]}}\"}"
+      },
+      "name": "Generar Guión con IA",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [600, 200]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "audioUrl",
+              "value": "https://fake-audio-host.com/audio.mp3"
+            }
+          ]
+        }
+      },
+      "name": "Simular Audio",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [800, 200]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "imagenUrl",
+              "value": "https://fake-image.com/imagen.png"
+            }
+          ]
+        }
+      },
+      "name": "Simular Imagen",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [1000, 200]
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "videoUrl",
+              "value": "https://fake-video.com/video.mp4"
+            }
+          ]
+        }
+      },
